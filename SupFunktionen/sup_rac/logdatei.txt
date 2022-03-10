@@ -1,0 +1,29 @@
+------------ Logbook start -------------------
+Application-Info: Version 0.0.37, 08.03.2022
+
+Project: Weinanalyse
+File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalysefunktionen\SupFunktionen\Alle_Weindaten.csv
+
+Number of rows read: 6498
+Haeder-Info:
+0.  Type
+1.  FixedAcidity
+2.  VolatileAcidity
+3.  CitricAcid
+4.  ResidualSugar
+5.  Chlorides
+6.  FreeSulfurDioxide
+7.  TotalSulfurDioxide
+8.  Density
+9.  pH
+10.  Sulphates
+11.  Alcohol
+12.  Quality
+
+Results reported as file(s) with the following template: resfile_*.csv
+The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_rac"
+
+Execution time in sec: 3.628
+
+In case of problems, please compare with the config.txt file!
+------------ Logbook end ---------------------
