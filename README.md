@@ -1,4 +1,4 @@
-# Datenanalysefunktion
+# Datenanalysefunktionen
 ## Eine Sammlung von Datenanalysefunktionen in C++
 
 
