@@ -6,7 +6,7 @@
 Ich bin noch ein absoluter C++-Neuling und die hier veröffentlichten Programme beschreiben
 meine C++-Lernreise.
 Um meine Motivation hochzuhalten, wähle ich Beispiele aus dem Bereich der Datenanalyse.
-## Beschreibung der Funktionen:
+## Beschreibung der Programme:
 
 Das Programm **sup_rac**:
 
