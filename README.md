@@ -1,4 +1,4 @@
 # Datenanalysefunktion
  Eine Sammlung von Datenanalysefunktionen in C++
 -----------------------------------------------------------------------------------
-##sup_rac
+## sup_rac
