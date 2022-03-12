@@ -23,7 +23,7 @@ Haeder-Info:
 Results reported as file(s) with the following template: resfile_*.csv
 The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_rac"
 
-Execution time in sec: 3.628
+Execution time in sec: 2.95
 
 In case of problems, please compare with the config.txt file!
 ------------ Logbook end ---------------------
