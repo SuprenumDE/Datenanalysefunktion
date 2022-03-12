@@ -1,5 +1,5 @@
-# Datenanalysefunktion
-## Eine Sammlung von Datenanalysefunktionen in C++
+# Datenanalysefunktion #
+## Eine Sammlung von Datenanalysefunktionen in C++ ##
  
 Ich bin noch ein absoluter C++-Neuling und die hier veröffentlichten Programme beschreiben
 meine C++-Lernreise.
