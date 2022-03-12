@@ -16,3 +16,9 @@ Diese Programm ließt die Datei *Alle_Weindaten.csv* zeilenweise ein und akkumul
 auf Basis des der Qualitätsnote in eine Ergebnis-Datei. 
 
 Das Programm wird über die *config.ini*-Datei parametrisiert und erstellt eine Log-Datei (logdatei.txt).
+
+Die Funktion als Prozessüberblick:
+
+![sup_rac-Prozess](/images/sup_rac_Prozess.jpg)
+
+
