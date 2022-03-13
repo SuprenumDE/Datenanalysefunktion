@@ -77,6 +77,15 @@ void klassifikator(string zeichenkette, string merkmal, string resfile, string h
 }
 // ------------------------------------------------------------------------
 
+/* Umrechnung der Geo-Koordinaten in die euklidische Distanz
+* Input: String (zeichenkette)
+* Output: Vector, string
+*/
+vector<string>DistanzEuklid(vector<string> separierteZeile)
+{
+
+    return zeichenkette;
+}
 
 //---------------- Funktionen Ende --------------------
 
@@ -100,6 +109,7 @@ int main()
     string trennzeichen{ ";" };                  // Trennzeichen zum separieren des eingelesenen Zeileninhalts
     string header_row{ "" };                     // Ist eine Kopfzeile (Header row) vorhanden?
     string header_row_save{ "" };                // Sicherung der Kopfzeile als String
+    string process_row{ "" };                    // Zeile, die aktuell bearbeitet wird (Arbeitszeile der inZeile)
 
     vector<string> separierteZeile;              // Eingelesene Datenzeile in Elemente separiert
     vector<string> HeaderInfo;                   // Nimmt die Kopfzeile (z. B. die Merkmalsbezeichnungen) auf
@@ -196,8 +206,9 @@ int main()
 
             }
 
+             
             // Eingelesene Daten klassifizieren und spreichern:
-            if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
+            // if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
 
             in_n += 1; // Anzahl der eingelesenen Zeilen hochzählen
 
@@ -222,8 +233,19 @@ int main()
 
             }
 
+            /* Akkumulierungsfunktionen:
+            Nur durchführen, wenn der Inhalt des ersten Geo-Feldes nicht leer ist!
+            Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
+            1. Geo-Daten in km-Disntanzen umrechnen
+             */
+            if ((in_n > 0) && (separierteZeile[3] > 0)) {
+
+                process_row = DistanzEuklid(separierteZeile);
+
+            }
+
             // Eingelesene Daten klassifizieren und spreichern:
-            if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
+            // if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
 
             // Abbruchbedingung prüfen:
             if (in_n == read_n_rows) {
@@ -297,6 +319,3 @@ int main()
     // -------------------------------------------------------------
     return 0;
 }
-
-
-m dieses Projekt später erneut zu öffnen, wechseln Sie zu "Datei" > "Öffnen" > "Projekt", und wählen Sie die SLN-Datei aus.
