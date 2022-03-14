@@ -2,23 +2,14 @@
 Application-Info: Version 0.0.01, 13.03.2022
 
 Project: NY-Taxi-Datenanalyse
-File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalysefunktionen\SupFunktionen\train.csv
+File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalyse Beispieldaten\train.csv
 
 Number of rows read: 1000
-Haeder-Info:
-0.  key
-1.  fare_amount
-2.  pickup_datetime
-3.  pickup_longitude
-4.  pickup_latitude
-5.  dropoff_longitude
-6.  dropoff_latitude
-7.  passenger_count
 
-Results reported as file(s) with the following template: resfile_*.csv
+The input file transformed into distances was saved as: disfile.csv
 The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_accumulate"
 
-Execution time in sec: 0.734
+Execution time in sec: 1.742
 
 In case of problems, please compare with the config.txt file!
 ------------ Logbook end ---------------------

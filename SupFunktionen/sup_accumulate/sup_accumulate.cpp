@@ -48,43 +48,89 @@ vector<string>ZeichenSeparieren(string zeichenkette, string trennzeichen)
 }
 // ------------------------------------------------------------------------
 
-/* Zeile bezüglich eines Merkmals klassifizieren und in der
-   entsprechenden Datei ablegen.
-   Diese Funktion ist datenanalystisch gesehen, ein Klassifikator
-   basierend auf einem Merkmal
-   Input: String, Vektor-Element, resdatei-Template
+/* Umrechnung der Geo-Koordinaten in die euklidische Distanz
+* Input: String (zeichenkette)
+* Output: String, Trennzeichen: ;
 */
-void klassifikator(string zeichenkette, string merkmal, string resfile, string header_row_save)
+string DistanzEuklid(vector<string> separierteZeile)
 {
-    // Resultatdatei-Template mit Merkmal-Ausprägung verknüpfen:
-    resfile += merkmal;
-    resfile += ".csv";
+    string zeichenkette{ "" };
 
-    ofstream resout;
+    // Geo-Daten aus der separierten Zeile entnehmen:
+    double start_longitude{ 0.0 };  // X-Achse
+    double start_latitude{ 0.0 };   // Y-Achse
+    double ende_longitude{ 0.0 };
+    double ende_latitude{ 0.0 };
 
-    if (std::filesystem::exists(resfile)) {         // Datei ist vorhanden
-        // Nun findet die eigentliche Speicherung an:
-        resout.open(resfile, ofstream::app);
-        resout << zeichenkette << "\n";
-    }
-    else {                                          // Datei ist nicht vorhanden, Kopfzeile wird eingefügt!
-        resout.open(resfile, ofstream::app);
-        resout << header_row_save << "\n";
-        resout << zeichenkette << "\n";
-    }
+    double geo_X{ 0.0 };
+    double geo_Y{ 0.0 };
+    double Distanz{ 0.0 };
 
-    resout.close();
+    start_longitude = stod(separierteZeile[3]);
+    start_latitude = stod(separierteZeile[4]);
+    ende_longitude = stod(separierteZeile[5]);
+    ende_latitude = stod(separierteZeile[6]);
+    
+    // Faktoren für den Breiten-/Längengrad New York (km):
+    float longFaktor{ 85.0 };
+    float latFaktor{ 111.0 }; 
+
+    // Berechnung der Distanz:
+    geo_X = longFaktor * (abs(start_longitude - ende_longitude));
+    geo_Y = latFaktor * (abs(start_latitude - ende_latitude));
+    Distanz = sqrt(geo_X * geo_X + geo_X * geo_X);
+
+    // Ausgabezeichenkette basteln:
+    zeichenkette = separierteZeile[0];   // key
+    zeichenkette += ";";                 // Trennzeichen csv (Excel, deutsch)
+    zeichenkette += separierteZeile[1];  // fare_amount
+    zeichenkette += ";";
+    zeichenkette += separierteZeile[2];  // pickup_datetime
+    zeichenkette += ";";
+    zeichenkette += to_string(Distanz);  // Die berechnete Distanz
+    zeichenkette += ";";
+    zeichenkette += separierteZeile[7];  // passenger_count
+
+    return zeichenkette;
 }
 // ------------------------------------------------------------------------
 
-/* Umrechnung der Geo-Koordinaten in die euklidische Distanz
-* Input: String (zeichenkette)
-* Output: Vector, string
+/* Die Daten mit den transformierten Geo-Daten in km-Distanzen
+* als Datei speichern.
+* Input: FahrtenDistanz
+* Output: Datei
 */
-vector<string>DistanzEuklid(vector<string> separierteZeile)
+void speicherDistanzen(string zeichenkette, string Dateibezeichnung)
 {
+    ofstream disout;
 
-    return zeichenkette;
+    if (std::filesystem::exists(Dateibezeichnung)) { 
+        // Datei ist vorhanden
+        // Nun findet die eigentliche Speicherung an:
+        disout.open(Dateibezeichnung, ofstream::app);
+        disout << zeichenkette << "\n";
+
+    }
+    else {                                          // Datei ist NICHT vorhanden, Kopfzeile wird vorangestellt!
+        disout.open(Dateibezeichnung, ofstream::app);
+
+        string Kopfzeile{ "" };
+        Kopfzeile = "key";
+        Kopfzeile += ";";                 // Trennzeichen csv (Excel, deutsch)
+        Kopfzeile += "fare_amount";
+        Kopfzeile += ";";
+        Kopfzeile += "pickup_datetime";
+        Kopfzeile += ";";
+        Kopfzeile += "Distance_km";
+        Kopfzeile += ";";
+        Kopfzeile += "passenger_count";
+
+
+        disout << Kopfzeile << "\n";
+        disout << zeichenkette << "\n";
+    }
+
+    disout.close();
 }
 
 //---------------- Funktionen Ende --------------------
@@ -96,11 +142,11 @@ int main()
 
     string pgm_version{ "Version 0.0.01, 13.03.2022" };
 
-    const int contfig_row_n{ 14 };               // Anzahl aller Configfile-Informationen
+    const int contfig_row_n{ 12 };               // Anzahl aller Configfile-Informationen
 
     string config_file{ "config.ini" };          // Muss unbedingt vorhanden sein!
     string logdatei{ "logdatei.txt" };           // Logbuchdatei
-    string resdatei{ "" };                       // Ergebnisdatei-Template
+    string distancefile{ "" };                   // Analyseergebnis: Distanzdatei
     string config_content[contfig_row_n]{ "" };  // Nimmt den Ihnahlt der Configdatei auf
     string ProjektBezeichnung = "";
     string dateiname = "";                       // Bezeichnung der zuverarbeitende Datei
@@ -109,7 +155,7 @@ int main()
     string trennzeichen{ ";" };                  // Trennzeichen zum separieren des eingelesenen Zeileninhalts
     string header_row{ "" };                     // Ist eine Kopfzeile (Header row) vorhanden?
     string header_row_save{ "" };                // Sicherung der Kopfzeile als String
-    string process_row{ "" };                    // Zeile, die aktuell bearbeitet wird (Arbeitszeile der inZeile)
+    string FahrtenDistanz{ "" };                 // Eingelesene Datenzeile (inZeile) in der die Geo-Daten als Distanzen in km abgebildet sind
 
     vector<string> separierteZeile;              // Eingelesene Datenzeile in Elemente separiert
     vector<string> HeaderInfo;                   // Nimmt die Kopfzeile (z. B. die Merkmalsbezeichnungen) auf
@@ -135,8 +181,7 @@ int main()
             if (i == 5) processing = config_content[i];
             if (i == 7) read_n_rows = stoi(config_content[i]);
             if (i == 9) trennzeichen = config_content[i];
-            if (i == 11) header_row = config_content[i];
-            if (i == 13) resdatei = config_content[i];
+            if (i == 11) distancefile = config_content[i];
 
         }
 
@@ -198,17 +243,20 @@ int main()
             // Eingelesenen String zerlegen:
             separierteZeile = ZeichenSeparieren(inZeile, trennzeichen);
 
-            // Kopfzeile der eingelesenen Datei sichern:
-            if ((in_n == 0) && (header_row == "Yes")) {
+            /* Akkumulierungsfunktionen:
+            Nur durchführen, wenn der Inhalt des ersten Geo-Feldes nicht leer ist!
+            Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
+            1. Geo-Daten in km-Distanzen umrechnen
+             */
+            if ((in_n > 0) && (separierteZeile[3] != "0")) {
 
-                header_row_save = inZeile;      // Kopfzeile als string sichern
-                HeaderInfo = separierteZeile;   // Kopfzeile separiert als Vektor 
+                FahrtenDistanz = DistanzEuklid(separierteZeile);
+
+                // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
+                speicherDistanzen(FahrtenDistanz, distancefile);
 
             }
 
-             
-            // Eingelesene Daten klassifizieren und spreichern:
-            // if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
 
             in_n += 1; // Anzahl der eingelesenen Zeilen hochzählen
 
@@ -225,27 +273,19 @@ int main()
             // Eingelesenen String zerlegen:
             separierteZeile = ZeichenSeparieren(inZeile, trennzeichen);
 
-            // Kopfzeile der eingelsenen Datei sichern:
-            if ((in_n == 0) && (header_row == "Yes")) {
-
-                header_row_save = inZeile;       // Kopfzeile als string sichern
-                HeaderInfo = separierteZeile;    // Kopfzeile separiert als Vektor 
-
-            }
-
             /* Akkumulierungsfunktionen:
             Nur durchführen, wenn der Inhalt des ersten Geo-Feldes nicht leer ist!
             Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
-            1. Geo-Daten in km-Disntanzen umrechnen
+            1. Geo-Daten in km-Distanzen umrechnen
              */
-            if ((in_n > 0) && (separierteZeile[3] > 0)) {
+            if ((in_n > 0) && (separierteZeile[3] != "0")) {
 
-                process_row = DistanzEuklid(separierteZeile);
+                FahrtenDistanz = DistanzEuklid(separierteZeile);
+                
+                // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
+                speicherDistanzen(FahrtenDistanz, distancefile);
 
             }
-
-            // Eingelesene Daten klassifizieren und spreichern:
-            // if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
 
             // Abbruchbedingung prüfen:
             if (in_n == read_n_rows) {
@@ -290,25 +330,11 @@ int main()
     log_out << "Application-Info: " << pgm_version << "\n\n";
     log_out << "Project: " << ProjektBezeichnung << "\n";
     log_out << "File analyzed: " << dateiname << "\n\n";
-    log_out << "Number of rows read: " << in_n << "\n";
-
-    // Header Information (How many Cols):
-    if (HeaderInfo.empty()) {
-        log_out << "No header available or read!\n";
-    }
-    else {
-        log_out << "Haeder-Info:\n";
-        for (size_t i = 0; i < HeaderInfo.size(); ++i)
-        {
-            log_out << i << ".  " << HeaderInfo[i] << "\n";
-        }
-        log_out << "\n";
-    }
-
-    log_out << "Results reported as file(s) with the following template: " << resdatei << "*.csv\n";
+    log_out << "Number of rows read: " << in_n << "\n\n";
+    log_out << "The input file transformed into distances was saved as: " << distancefile << "\n";
     log_out << "The files were saved in the following directory: " << std::filesystem::current_path() << "\n\n";
     log_out << "Execution time in sec: " << ((float)Zeit) / CLOCKS_PER_SEC << "\n";
-    log_out << "\n" << "In case of problems, please compare with the config.txt file!" << "\n";
+    log_out << "\n" << "In case of problems, please compare with the config.ini file!" << "\n";
     log_out << "------------ Logbook end ---------------------" << "\n";
 
     log_out.close();
