@@ -12,6 +12,7 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include "sup_functions.h"
 using namespace std;
 
 
@@ -81,15 +82,15 @@ string DistanzEuklid(vector<string> separierteZeile)
     Distanz = sqrt(geo_X * geo_X + geo_X * geo_X);
 
     // Ausgabezeichenkette basteln:
-    zeichenkette = separierteZeile[0];   // key
-    zeichenkette += ";";                 // Trennzeichen csv (Excel, deutsch)
-    zeichenkette += separierteZeile[1];  // fare_amount
+    zeichenkette = separierteZeile[0];          // key
+    zeichenkette += ";";                        // Trennzeichen csv (Excel, deutsch)
+    zeichenkette += ptoc(separierteZeile[1]);   // fare_amount
     zeichenkette += ";";
-    zeichenkette += separierteZeile[2];  // pickup_datetime
+    zeichenkette += separierteZeile[2];         // pickup_datetime
     zeichenkette += ";";
-    zeichenkette += to_string(Distanz);  // Die berechnete Distanz
+    zeichenkette += ptoc(to_string(Distanz));   // Die berechnete Distanz
     zeichenkette += ";";
-    zeichenkette += separierteZeile[7];  // passenger_count
+    zeichenkette += separierteZeile[7];         // passenger_count
 
     return zeichenkette;
 }
@@ -140,7 +141,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.0.01, 13.03.2022" };
+    string pgm_version{ "Version 0.0.35, 15.03.2022" };
 
     const int contfig_row_n{ 12 };               // Anzahl aller Configfile-Informationen
 

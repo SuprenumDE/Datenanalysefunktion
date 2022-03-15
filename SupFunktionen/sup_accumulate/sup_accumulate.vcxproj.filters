@@ -18,5 +18,13 @@
     <ClCompile Include="sup_accumulate.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="sup_functions.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sup_functions.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
