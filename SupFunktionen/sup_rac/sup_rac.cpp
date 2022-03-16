@@ -85,7 +85,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.0.37, 08.03.2022" };
+    string pgm_version{ "Version 0.0.40, 16.03.2022" };
 
     const int contfig_row_n{ 14 };               // Anzahl aller Configfile-Informationen
 
@@ -295,6 +295,20 @@ int main()
 
 
     // -------------------------------------------------------------
+
+    if (processing != "Yes") {
+
+        char eingabe{ 'q' };
+
+        // ZUm beenden die Taste q drücken:
+        do {
+            cout << "\nPress the q button and Enter to exit\n>>";
+            cin.get(eingabe);
+
+        } while (eingabe != 'q');
+
+    }
+
     return 0;
 }
 
