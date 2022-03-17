@@ -29,26 +29,6 @@ void pgmInfo(string x)
 }
 // ------------------------------------------------------------------------
 
-/* Zelegung der übergebenen Zeichenkette in einzelne Elemente
-   Input: String (zeichenkette, trennzeichen)
-   Output: Vector
-*/
-vector<string>ZeichenSeparieren(string zeichenkette, string trennzeichen)
-{
-    string::size_type start{ 0 };
-    string::size_type pos{ 0 };
-    vector<string> ergebnis;
-
-    do {
-        pos = zeichenkette.find_first_of(trennzeichen, start);
-        ergebnis.push_back(zeichenkette.substr(start, pos - start));
-        start = pos + 1;
-    } while (pos != string::npos);
-
-    return ergebnis;
-}
-// ------------------------------------------------------------------------
-
 /* Umrechnung der Geo-Koordinaten in die euklidische Distanz
 * Input: String (zeichenkette)
 * Output: String, Trennzeichen: ;
@@ -141,7 +121,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.0.35, 15.03.2022" };
+    string pgm_version{ "Version 0.0.36, 17.03.2022" };
 
     const int contfig_row_n{ 12 };               // Anzahl aller Configfile-Informationen
 

@@ -1,15 +1,15 @@
 ------------ Logbook start -------------------
-Application-Info: Version 0.0.01, 13.03.2022
+Application-Info: Version 0.0.35, 15.03.2022
 
 Project: NY-Taxi-Datenanalyse
 File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalyse Beispieldaten\train.csv
 
-Number of rows read: 1000
+Number of rows read: 10
 
 The input file transformed into distances was saved as: disfile.csv
 The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_accumulate"
 
-Execution time in sec: 0.393
+Execution time in sec: 0.011
 
 In case of problems, please compare with the config.ini file!
 ------------ Logbook end ---------------------
