@@ -123,7 +123,7 @@ int main()
 
     string pgm_version{ "Version 0.0.36, 17.03.2022" };
 
-    const int contfig_row_n{ 12 };               // Anzahl aller Configfile-Informationen
+    const int contfig_row_n{ 14 };               // Anzahl aller Configfile-Informationen
 
     string config_file{ "config.ini" };          // Muss unbedingt vorhanden sein!
     string logdatei{ "logdatei.txt" };           // Logbuchdatei
@@ -134,12 +134,11 @@ int main()
     string processing = "";                      // Soll die eingelesene Datei auf dem Screen gezeigt werden?
     string inZeile{ "" };                        // Eingeleseene Datenzeile
     string trennzeichen{ ";" };                  // Trennzeichen zum separieren des eingelesenen Zeileninhalts
-    string header_row{ "" };                     // Ist eine Kopfzeile (Header row) vorhanden?
-    string header_row_save{ "" };                // Sicherung der Kopfzeile als String
+    string classifiers{ "" };                    // Zeichenkette mit den Klassifizierungsgrenzen
     string FahrtenDistanz{ "" };                 // Eingelesene Datenzeile (inZeile) in der die Geo-Daten als Distanzen in km abgebildet sind
 
     vector<string> separierteZeile;              // Eingelesene Datenzeile in Elemente separiert
-    vector<string> HeaderInfo;                   // Nimmt die Kopfzeile (z. B. die Merkmalsbezeichnungen) auf
+    vector<string> separatedClassifiers;         // Eingelesene Klassifizierungsgrenze separriert
 
     long long read_n_rows{ 0 };                  // Stopp Ausfuehrung nach n Zeilen (n = 0: ohne Limitation)
     long long in_n{ 0 };                         // Anzahl der eingelesenen Datenzeilen
@@ -163,6 +162,7 @@ int main()
             if (i == 7) read_n_rows = stoi(config_content[i]);
             if (i == 9) trennzeichen = config_content[i];
             if (i == 11) distancefile = config_content[i];
+            if (i == 13) classifiers = config_content[i];
 
         }
 
@@ -184,10 +184,11 @@ int main()
         return EXIT_FAILURE;
     }
 
+    // 1. Schritt nach dem Einlesen der ini-Datei Datenklassifikator separieren:
+    separatedClassifiers = ZeichenSeparieren(classifiers, trennzeichen);
+
     // Aufruf Programm-Info
     if (processing != "Yes") pgmInfo(pgm_version);
-
-
 
 
     // ------------------ Zu analysierende Daten einlesen -------------------
@@ -265,6 +266,8 @@ int main()
                 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
                 speicherDistanzen(FahrtenDistanz, distancefile);
+
+                // Daten auf Basis der Distanz klassifizieren:
 
             }
 
