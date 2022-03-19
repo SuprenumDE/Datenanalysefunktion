@@ -123,25 +123,33 @@ int main()
 
     string pgm_version{ "Version 0.0.36, 17.03.2022" };
 
-    const int contfig_row_n{ 14 };               // Anzahl aller Configfile-Informationen
+    const int contfig_row_n{ 16 };                  // Anzahl aller Configfile-Informationen
 
-    string config_file{ "config.ini" };          // Muss unbedingt vorhanden sein!
-    string logdatei{ "logdatei.txt" };           // Logbuchdatei
-    string distancefile{ "" };                   // Analyseergebnis: Distanzdatei
-    string config_content[contfig_row_n]{ "" };  // Nimmt den Ihnahlt der Configdatei auf
+    string config_file{ "config.ini" };             // Muss unbedingt vorhanden sein!
+    string logdatei{ "logdatei.txt" };              // Logbuchdatei
+    string distancefile{ "" };                      // Analyseergebnis: Distanzdatei
+    string classifiedDataTemplate{ "" };            // Analysenergebnis: Über die Distanz klassifizierte Daten
+    string classfiedData{ "" };                     // Arbeitsvariable von classifiedDataTemplate
+    string config_content[contfig_row_n]{ "" };     // Nimmt den Ihnahlt der Configdatei auf
     string ProjektBezeichnung = "";
-    string dateiname = "";                       // Bezeichnung der zuverarbeitende Datei
-    string processing = "";                      // Soll die eingelesene Datei auf dem Screen gezeigt werden?
-    string inZeile{ "" };                        // Eingeleseene Datenzeile
-    string trennzeichen{ ";" };                  // Trennzeichen zum separieren des eingelesenen Zeileninhalts
-    string classifiers{ "" };                    // Zeichenkette mit den Klassifizierungsgrenzen
-    string FahrtenDistanz{ "" };                 // Eingelesene Datenzeile (inZeile) in der die Geo-Daten als Distanzen in km abgebildet sind
+    string dateiname = "";                          // Bezeichnung der zuverarbeitende Datei
+    string processing = "";                         // Soll die eingelesene Datei auf dem Screen gezeigt werden?
+    string inZeile{ "" };                           // Eingeleseene Datenzeile
+    string trennzeichen{ "" };                      // Trennzeichen zum Separieren des eingelesenen Zeileninhalts
+    string trennzeichenClassifiers{ ";" };          // Trennzeichen zum Separieren der erzeugten Distanz-CSV-Datei
+    string classifiers{ "" };                       // Zeichenkette mit den Klassifizierungsgrenzen
+    string FahrtenDistanz{ "" };                    // Eingelesene Datenzeile (inZeile) in der die Geo-Daten als Distanzen in km abgebildet sind
 
-    vector<string> separierteZeile;              // Eingelesene Datenzeile in Elemente separiert
-    vector<string> separatedClassifiers;         // Eingelesene Klassifizierungsgrenze separriert
+    string temp{ "" };
 
-    long long read_n_rows{ 0 };                  // Stopp Ausfuehrung nach n Zeilen (n = 0: ohne Limitation)
-    long long in_n{ 0 };                         // Anzahl der eingelesenen Datenzeilen
+    vector<string> separierteZeile;                 // Eingelesene Datenzeile in Elemente separiert
+    vector<string> separierteFahrtenDistanz{ "" };  // FahrtenDistanz in Elemente zerlegt
+    vector<string> separatedClassifiers;            // Eingelesene Klassifizierungsgrenze separriert
+
+    long long read_n_rows{ 0 };                     // Stopp Ausfuehrung nach n Zeilen (n = 0: ohne Limitation)
+    long long in_n{ 0 };                            // Anzahl der eingelesenen Datenzeilen
+
+    size_t n_classifiers{ 0 };                      // Anzahl der eingelesenen Klassifizierungsgrenzen
 
 
 
@@ -163,6 +171,7 @@ int main()
             if (i == 9) trennzeichen = config_content[i];
             if (i == 11) distancefile = config_content[i];
             if (i == 13) classifiers = config_content[i];
+            if (i == 15) classifiedDataTemplate = config_content[i];
 
         }
 
@@ -186,6 +195,7 @@ int main()
 
     // 1. Schritt nach dem Einlesen der ini-Datei Datenklassifikator separieren:
     separatedClassifiers = ZeichenSeparieren(classifiers, trennzeichen);
+    n_classifiers = separatedClassifiers.size();
 
     // Aufruf Programm-Info
     if (processing != "Yes") pgmInfo(pgm_version);
@@ -210,6 +220,10 @@ int main()
         cout << "Der Inhalt von Datei " << dateiname << " ist:\n\n";
 
     // Daten einlesen und analysieren:
+
+    classfiedData = classifiedDataTemplate;  // Arbeitkopie anlegen
+
+
     while (!datei_in.eof()) {
 
         // Kontinuierliches oder eine bestimmte Anzahl Datenzeilen einlesen?
@@ -268,6 +282,33 @@ int main()
                 speicherDistanzen(FahrtenDistanz, distancefile);
 
                 // Daten auf Basis der Distanz klassifizieren:
+                separierteFahrtenDistanz = ZeichenSeparieren(FahrtenDistanz, trennzeichenClassifiers);
+
+                for (int i = 0; i <= n_classifiers; i++)
+                {
+                    if (i == 0) // der Startbereich des 1. Klasse ist immer 0!
+                    {
+                        if (separierteFahrtenDistanz[3] <= separatedClassifiers[i])
+                        {
+                            classfiedData += separatedClassifiers[i];
+                            classfiedData += ".csv";
+                            speicherDistanzen(FahrtenDistanz, classfiedData);
+                            classfiedData = classifiedDataTemplate;
+                        }
+
+                    }
+                    else { // Der i-1-Klassifikator ist die Untergrenze!
+
+                        if ((separierteFahrtenDistanz[3] >= separatedClassifiers[i-1]) && (separierteFahrtenDistanz[3] <= separatedClassifiers[i]))
+                        {
+                            classfiedData += separatedClassifiers[i];
+                            classfiedData += ".csv";
+                            speicherDistanzen(FahrtenDistanz, classfiedData);
+                            classfiedData = classifiedDataTemplate;
+                        }
+                    }
+                   
+                } // Ende for
 
             }
 
