@@ -121,7 +121,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.0.36, 17.03.2022" };
+    string pgm_version{ "Version 0.0.40, 20.03.2022" };
 
     const int contfig_row_n{ 16 };                  // Anzahl aller Configfile-Informationen
 
@@ -286,9 +286,9 @@ int main()
 
                 for (int i = 0; i <= n_classifiers; i++)
                 {
-                    if (i == 0) // der Startbereich des 1. Klasse ist immer 0!
+                    if (i == 0) // Der Startbereich des 1. Klasse ist immer 0!
                     {
-                        if (separierteFahrtenDistanz[3] <= separatedClassifiers[i])
+                        if (stod(separierteFahrtenDistanz[3]) <= stod(separatedClassifiers[i])) //  Vergleich mit dem 1. Klassifikator
                         {
                             classfiedData += separatedClassifiers[i];
                             classfiedData += ".csv";
@@ -297,15 +297,18 @@ int main()
                         }
 
                     }
-                    else { // Der i-1-Klassifikator ist die Untergrenze!
+                    else { // Der i-1-Klassifikator ist die Untergrenze!            // Vergleiche ab dem 2. Klassifikator
 
-                        if ((separierteFahrtenDistanz[3] >= separatedClassifiers[i-1]) && (separierteFahrtenDistanz[3] <= separatedClassifiers[i]))
+                        if ((stod(separierteFahrtenDistanz[3]) >= stod(separatedClassifiers[i-1])) && (stod(separierteFahrtenDistanz[3]) <= stod(separatedClassifiers[i])))
                         {
                             classfiedData += separatedClassifiers[i];
                             classfiedData += ".csv";
                             speicherDistanzen(FahrtenDistanz, classfiedData);
                             classfiedData = classifiedDataTemplate;
                         }
+
+                        // Alles was größer ist als die größte Klassifizierung aufnehmen:
+
                     }
                    
                 } // Ende for
