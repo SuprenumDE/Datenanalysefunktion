@@ -224,7 +224,8 @@ int main()
     classfiedData = classifiedDataTemplate;  // Arbeitkopie anlegen
 
 
-    while (!datei_in.eof()) {
+    while (!datei_in.eof()) 
+    {
 
         // Kontinuierliches oder eine bestimmte Anzahl Datenzeilen einlesen?
         if (read_n_rows == 0) { // Kontinuierlich
@@ -274,17 +275,18 @@ int main()
             Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
             1. Geo-Daten in km-Distanzen umrechnen
              */
-            if ((in_n > 0) && (separierteZeile[3] != "0")) {
+            if ((in_n > 0) && stod(separierteZeile[3]) != 0)
+            {
 
                 FahrtenDistanz = DistanzEuklid(separierteZeile);
-                
+
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
                 speicherDistanzen(FahrtenDistanz, distancefile);
 
                 // Daten auf Basis der Distanz klassifizieren:
                 separierteFahrtenDistanz = ZeichenSeparieren(FahrtenDistanz, trennzeichenClassifiers);
 
-                for (int i = 0; i <= n_classifiers; i++)
+                for (int i = 0; i <= n_classifiers - 1; i++)
                 {
                     if (i == 0) // Der Startbereich des 1. Klasse ist immer 0!
                     {
@@ -297,34 +299,47 @@ int main()
                         }
 
                     }
-                    else { // Der i-1-Klassifikator ist die Untergrenze!            // Vergleiche ab dem 2. Klassifikator
 
-                        if ((stod(separierteFahrtenDistanz[3]) >= stod(separatedClassifiers[i-1])) && (stod(separierteFahrtenDistanz[3]) <= stod(separatedClassifiers[i])))
+                    if (i > 0) {
+
+                        if ((stod(separierteFahrtenDistanz[3]) > stod(separatedClassifiers[i - 1])) && (stod(separierteFahrtenDistanz[3]) <= stod(separatedClassifiers[i])))
+
+                            // Der i-1-Klassifikator ist die Untergrenze!            // Vergleiche ab dem 2. Klassifikator
+
                         {
                             classfiedData += separatedClassifiers[i];
                             classfiedData += ".csv";
                             speicherDistanzen(FahrtenDistanz, classfiedData);
                             classfiedData = classifiedDataTemplate;
+
                         }
+                        else if (stod(separierteFahrtenDistanz[3]) > stod(separatedClassifiers[n_classifiers - 1]))
+                        {   // Alles was größer ist als die größte Klassifizierung aufnehmen (der Restesammler):
 
-                        // Alles was größer ist als die größte Klassifizierung aufnehmen:
+                            classfiedData += separatedClassifiers[n_classifiers - 1];
+                            classfiedData += "plus.csv";
+                            speicherDistanzen(FahrtenDistanz, classfiedData);
+                            classfiedData = classifiedDataTemplate;
 
-                    }
-                   
+                        } 
+
+                    } // Ende if
+                    
+ 
                 } // Ende for
 
-            }
+            } // Ende Akkumulierungsfunktionen if
 
             // Abbruchbedingung prüfen:
             if (in_n == read_n_rows) {
                 break;
-            }
-
-            in_n += 1; // Anzahl der eingelesenen Zeilen zählen
+                }
 
         }
+            
+        in_n += 1; // Anzahl der eingelesenen Zeilen zählen
 
-
+    } // Ende while
 
 
         if (processing != "Yes") {
@@ -333,7 +348,7 @@ int main()
             cout << inZeile << "\n";
         }
 
-    }
+    
 
     datei_in.close();
 
