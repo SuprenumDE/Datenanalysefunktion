@@ -4,12 +4,13 @@ Application-Info: Version 0.0.40, 20.03.2022
 Project: NY-Taxi-Datenanalyse
 File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalyse Beispieldaten\train.csv
 
-Number of rows read: 1000
+Number of rows read: 100000
 
 The input file transformed into distances was saved as: disfile.csv
+The classified data was saved under the template classified_data_
 The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_accumulate"
 
-Execution time in sec: 1.16
+Execution time in sec: 158.546
 
 In case of problems, please compare with the config.ini file!
 ------------ Logbook end ---------------------

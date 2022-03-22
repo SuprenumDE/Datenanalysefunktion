@@ -25,6 +25,29 @@ std::string ptoc(std::string zeichenkette)
 }
 // ------------------------------------------------------------------------
 
+// Dezimalkomma gegen Dezimalpunkt ersetzen:
+std::string pcot(std::string zeichenkette)
+{
+
+	std::string dezimalzeichen{ "," };
+	std::string dezimal_neu{ "." };
+	size_t position{ 0 };
+
+	while ((position = zeichenkette.find(dezimalzeichen, position)) != std::string::npos)
+	{
+
+		zeichenkette.replace(position, dezimalzeichen.size(), dezimal_neu);
+
+	}
+
+
+	return zeichenkette;
+
+}
+// ------------------------------------------------------------------------
+
+
+
 /* Zerlegung der übergebenen Zeichenkette in einzelne Elemente
    Input: String (zeichenkette, trennzeichen)
    Output: Vector

@@ -121,7 +121,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.0.40, 20.03.2022" };
+    string pgm_version{ "Version 0.10.0, 22.03.2022" };
 
     const int contfig_row_n{ 16 };                  // Anzahl aller Configfile-Informationen
 
@@ -286,11 +286,22 @@ int main()
                 // Daten auf Basis der Distanz klassifizieren:
                 separierteFahrtenDistanz = ZeichenSeparieren(FahrtenDistanz, trennzeichenClassifiers);
 
+                double sfd{ 0.0 };          // Hilfsvaribale für separierteFahrtenDistanz[3]
+                double sepClass{ 0.0 };     // Hilfsvariable für separatedClassifiers[i]
+                double sepClass_1{ 0.0 };   // Hilfsvariable für separatedClassifiers[i -1]
+                double sepClass_last{ 0.0 };// Hilfsvariable für separatedClassifiers[letztes Element]
+
+                sepClass_last = stod(separatedClassifiers[n_classifiers - 1]);
+
                 for (int i = 0; i <= n_classifiers - 1; i++)
                 {
+                    sfd = stod(pcot(separierteFahrtenDistanz[3])); // Auchtung! Das Komma mnuss gegen einen Punkt getauscht werden!
+                    sepClass = stod(separatedClassifiers[i]);
+
+
                     if (i == 0) // Der Startbereich des 1. Klasse ist immer 0!
                     {
-                        if (stod(separierteFahrtenDistanz[3]) <= stod(separatedClassifiers[i])) //  Vergleich mit dem 1. Klassifikator
+                        if (sfd <= sepClass) //  Vergleich mit dem 1. Klassifikator
                         {
                             classfiedData += separatedClassifiers[i];
                             classfiedData += ".csv";
@@ -302,7 +313,9 @@ int main()
 
                     if (i > 0) {
 
-                        if ((stod(separierteFahrtenDistanz[3]) > stod(separatedClassifiers[i - 1])) && (stod(separierteFahrtenDistanz[3]) <= stod(separatedClassifiers[i])))
+                        sepClass_1 = stod(separatedClassifiers[i - 1]);
+
+                        if ((sfd > sepClass_1) && (sfd <= sepClass))
 
                             // Der i-1-Klassifikator ist die Untergrenze!            // Vergleiche ab dem 2. Klassifikator
 
@@ -313,19 +326,23 @@ int main()
                             classfiedData = classifiedDataTemplate;
 
                         }
-                        else if (stod(separierteFahrtenDistanz[3]) > stod(separatedClassifiers[n_classifiers - 1]))
-                        {   // Alles was größer ist als die größte Klassifizierung aufnehmen (der Restesammler):
-
-                            classfiedData += separatedClassifiers[n_classifiers - 1];
-                            classfiedData += "plus.csv";
-                            speicherDistanzen(FahrtenDistanz, classfiedData);
-                            classfiedData = classifiedDataTemplate;
-
-                        } 
+                         
 
                     } // Ende if
                     
- 
+                    if (sfd > sepClass_last)
+                    {   // Alles was größer ist als die größte Klassifizierung aufnehmen (der Restesammler):
+
+                        classfiedData += separatedClassifiers[n_classifiers - 1];
+                        classfiedData += "plus.csv";
+                        speicherDistanzen(FahrtenDistanz, classfiedData);
+                        classfiedData = classifiedDataTemplate;
+
+                        // Gefunden, also raus aus der for-Schleife:
+                        break;
+
+                    }
+
                 } // Ende for
 
             } // Ende Akkumulierungsfunktionen if
@@ -337,18 +354,15 @@ int main()
 
         }
             
-        in_n += 1; // Anzahl der eingelesenen Zeilen zählen
-
-    } // Ende while
-
-
         if (processing != "Yes") {
 
             // Eingelesene Zeile auf ausgeben:
             cout << inZeile << "\n";
         }
 
-    
+        in_n += 1; // Anzahl der eingelesenen Zeilen zählen
+
+    } // Ende while
 
     datei_in.close();
 
@@ -375,6 +389,7 @@ int main()
     log_out << "File analyzed: " << dateiname << "\n\n";
     log_out << "Number of rows read: " << in_n << "\n\n";
     log_out << "The input file transformed into distances was saved as: " << distancefile << "\n";
+    log_out << "The classified data was saved under the template " << classifiedDataTemplate << "\n";
     log_out << "The files were saved in the following directory: " << std::filesystem::current_path() << "\n\n";
     log_out << "Execution time in sec: " << ((float)Zeit) / CLOCKS_PER_SEC << "\n";
     log_out << "\n" << "In case of problems, please compare with the config.ini file!" << "\n";
