@@ -5,20 +5,18 @@
 -----------------------------------------------------------------------------------
 Ich bin noch ein absoluter C++-Neuling und die hier veröffentlichten Programme beschreiben
 meine C++-Lernreise.
-Um meine Motivation hochzuhalten, wähle ich Beispiele aus dem Bereich der Datenanalyse.
-## Beschreibung der Programme:
+Um meine Motivation hochzuhalten, wähle ich Beispiele aus dem Bereich der *Datenanalyse*.
 
-Das Programm **sup_rac**:
+Das Hauptaugenmerk im Datenanalyse-Prozess liegt im Bereich der Modellbildung und der 
+Modellbeurteilung. Das ist auch sicher ein spannender Prozess. Was im Datenanalyseprozess
+aber immer unterschätzt wird, ist der Datenvorbereitungschritt. Dieser Prozessschritt ist 
+der zeit- und budgetaufwändigste Abschnitt des Gesamtprozesses. In diesem Schritt kommt es
+nicht nur auf die Beherrschung der Analysewerkzeuge an, sondern auch in einem besonderen
+Maß auf Domänwissen an. Ideal ist, wenn die Datenanalyst:innen über dieses Wissen verfügt. Wenn 
+das Wissen nicht vorhanden ist, ist die dringende Empfehlung geeignete Expert:innen beizustellen.
 
-Ist mein 1. C++-Programm.
+Der Datenanalyseprozess als Überblick:
 
-Diese Programm ließt die Datei *Alle_Weindaten.csv* zeilenweise ein und akkumuliert die Beobachtungen pro Wein
-auf Basis des der Qualitätsnote in eine Ergebnis-Datei. 
-
-Das Programm wird über die *config.ini*-Datei parametrisiert und erstellt eine Log-Datei (logdatei.txt).
-
-Die Funktion als Prozessüberblick:
-
-![sup_rac-Prozess](/images/sup_rac_Prozess.jpg)
+![Übersicht Datenanalyseprozess](/images/Aufwanddatenanalyse.jpg)
 
 
