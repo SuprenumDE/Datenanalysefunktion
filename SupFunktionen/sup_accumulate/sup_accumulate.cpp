@@ -68,6 +68,10 @@ string DistanzEuklid(vector<string> separierteZeile)
     zeichenkette += ";";
     zeichenkette += separierteZeile[2];         // pickup_datetime
     zeichenkette += ";";
+    zeichenkette += ptoc(separierteZeile[3]);   // Startlongitude
+    zeichenkette += ";";
+    zeichenkette += ptoc(separierteZeile[4]);   // Startlatitude
+    zeichenkette += ";";
     zeichenkette += ptoc(to_string(Distanz));   // Die berechnete Distanz
     zeichenkette += ";";
     zeichenkette += separierteZeile[7];         // passenger_count
@@ -102,6 +106,10 @@ void speicherDistanzen(string zeichenkette, string Dateibezeichnung)
         Kopfzeile += ";";
         Kopfzeile += "pickup_datetime";
         Kopfzeile += ";";
+        Kopfzeile += "Startlongitude";
+        Kopfzeile += ";";
+        Kopfzeile += "Startlatitude";
+        Kopfzeile += ";";
         Kopfzeile += "Distance_km";
         Kopfzeile += ";";
         Kopfzeile += "passenger_count";
@@ -121,7 +129,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.10.0, 22.03.2022" };
+    string pgm_version{ "Version 0.11.0, 27.03.2022" };
 
     const int contfig_row_n{ 16 };                  // Anzahl aller Configfile-Informationen
 
