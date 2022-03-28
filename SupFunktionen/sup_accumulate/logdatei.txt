@@ -10,7 +10,7 @@ The input file transformed into distances was saved as: disfile.csv
 The classified data was saved under the template classified_data_
 The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_accumulate"
 
-Execution time in sec: 128.198
+Execution time in sec: 125.577
 
 In case of problems, please compare with the config.ini file!
 ------------ Logbook end ---------------------
