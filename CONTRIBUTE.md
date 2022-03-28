@@ -1,4 +1,4 @@
-# Beitragen zum C++-Projekt Datenanalysefunktionen#
+# Beitragen zum C++-Projekt Datenanalysefunktionen
 
 Wie unter Readme beschrieben, ist das Projekt **Datenanalysefunktionen** meine C++-Lernreise, um C++ als Tool zur Datenanalyse einzusetzen.
 Dabei ist das Thema *Datenanalyse* meine Motivation. Die dabei entsethenden C++-Programme starten auf einen sehr einfachen Niveau um im Laufe
