@@ -23,7 +23,7 @@ Der Datenanalyseprozess als Überblick:
 ![Übersicht Datenanalyseprozess](/images/Aufwanddatenanalyse.jpg)
 
 Mit Hilfe der in C++ geschriebenen Programme soll, so mein Ziel, der Prozessschritt *Daten
-vorbereiten* für kontinuierlich anfallenden Daten effizient durchgeführt werden können. Die
+vorbereiten* für *kontinuierlich* anfallenden Daten effizient durchgeführt werden können. Die
 hier abgelegten Programme (als .cpp-Datei) sollen dazu als Template dienen. Dazu sind sie
 für den C++-Kenner möglicherweise überkommentiert, aber - so denke ich - der Anfänger wird
 es zu schätzen wissen.
