@@ -41,4 +41,10 @@
 *.vcxproj
 *.filters
 *.user
+*.ipch
+*.db-shm
+*.db-wal
+*.opendb
+*.recipe
+
 
