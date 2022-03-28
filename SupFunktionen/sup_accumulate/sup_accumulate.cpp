@@ -129,7 +129,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.11.0, 27.03.2022" };
+    string pgm_version{ "Version 0.11.01, 28.03.2022" };
 
     const int contfig_row_n{ 16 };                  // Anzahl aller Configfile-Informationen
 
@@ -303,7 +303,8 @@ int main()
 
                 for (int i = 0; i <= n_classifiers - 1; i++)
                 {
-                    sfd = stod(pcot(separierteFahrtenDistanz[3])); // Auchtung! Das Komma mnuss gegen einen Punkt getauscht werden!
+                    // Distanz aus Vektor kopieren:
+                    sfd = stod(pcot(separierteFahrtenDistanz[5])); // Auchtung! Das Komma mnuss gegen einen Punkt getauscht werden!
                     sepClass = stod(separatedClassifiers[i]);
 
 
