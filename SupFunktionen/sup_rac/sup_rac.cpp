@@ -85,7 +85,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.01.40, 16.03.2022" };
+    string pgm_version{ "Version 0.01.40, 28.03.2022" };
 
     const int contfig_row_n{ 14 };               // Anzahl aller Configfile-Informationen
 
