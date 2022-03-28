@@ -38,4 +38,7 @@
 *.pdb
 *.db
 *.suo
+*.vcxproj
+*.filters
+*.user
 
