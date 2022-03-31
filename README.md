@@ -31,6 +31,6 @@ es zu schätzen wissen.
 Der nächste Schritt im Datenanalyseprozess ist die *Modellbildung*. Auch hier spielt C++ eine Rolle,
 meist aber *verdeckt* als R-Funktion. Aus Lerngünden ist es vielleicht ab und an sinnvoll auch für
 diesen Schritt eigene C++-Prorgamme/Funktionen zu entwickeln, aber in den meisten Fällen wir die
-Statistikumgebung genutzt.
+*Statistikumgebung R* genutzt.
 
 Für Hinweise und Unterstützung bin ich dankbar, siehe [CONTRIBUTE](https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/CONTRIBUTE.md).
