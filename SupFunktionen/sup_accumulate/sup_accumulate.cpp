@@ -82,22 +82,26 @@ string DistanzEuklid(vector<string> separierteZeile)
 
 /* Die Daten mit den transformierten Geo-Daten in km-Distanzen
 * als Datei speichern.
-* Input: FahrtenDistanz
+* Input: FahrtenDistanz, Dateibezeichnung, verzeichnis (als filesystem-Objekt)
 * Output: Datei
 */
-void speicherDistanzen(string zeichenkette, string Dateibezeichnung)
+void speicherDistanzen(string zeichenkette, string Dateibezeichnung, filesystem::path(verzeichnis))
 {
+
     ofstream disout;
 
-    if (std::filesystem::exists(Dateibezeichnung)) { 
+    // Verzeichnis und Dateiname zusammenbringen:
+    verzeichnis.append(Dateibezeichnung);
+
+    if (std::filesystem::exists(verzeichnis)) {
         // Datei ist vorhanden
         // Nun findet die eigentliche Speicherung an:
-        disout.open(Dateibezeichnung, ofstream::app);
+        disout.open(verzeichnis, ofstream::app);
         disout << zeichenkette << "\n";
 
     }
-    else {                                          // Datei ist NICHT vorhanden, Kopfzeile wird vorangestellt!
-        disout.open(Dateibezeichnung, ofstream::app);
+    else {     // Datei ist NICHT vorhanden, Kopfzeile wird vorangestellt!
+        disout.open(verzeichnis, ofstream::app);
 
         string Kopfzeile{ "" };
         Kopfzeile = "key";
@@ -129,16 +133,17 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.11.01, 28.03.2022" };
+    string pgm_version{ "Version 0.12.01, 03.04.2022" };
 
-    const int contfig_row_n{ 16 };                  // Anzahl aller Configfile-Informationen
+    const int contfig_row_n{ 18 };                  // Anzahl aller Configfile-Informationen
 
     string config_file{ "config.ini" };             // Muss unbedingt vorhanden sein!
     string logdatei{ "logdatei.txt" };              // Logbuchdatei
     string distancefile{ "" };                      // Analyseergebnis: Distanzdatei
+    string dirDistanceFile{ "" };                   // Verzeichnis für die Distanzdateien
     string classifiedDataTemplate{ "" };            // Analysenergebnis: Über die Distanz klassifizierte Daten
     string classfiedData{ "" };                     // Arbeitsvariable von classifiedDataTemplate
-    string config_content[contfig_row_n]{ "" };     // Nimmt den Ihnahlt der Configdatei auf
+    string config_content[contfig_row_n]{ "" };     // Nimmt den Inhalt der Configdatei auf
     string ProjektBezeichnung = "";
     string dateiname = "";                          // Bezeichnung der zuverarbeitende Datei
     string processing = "";                         // Soll die eingelesene Datei auf dem Screen gezeigt werden?
@@ -180,6 +185,7 @@ int main()
             if (i == 11) distancefile = config_content[i];
             if (i == 13) classifiers = config_content[i];
             if (i == 15) classifiedDataTemplate = config_content[i];
+            if (i == 17) dirDistanceFile = config_content[i];
 
         }
 
@@ -201,9 +207,16 @@ int main()
         return EXIT_FAILURE;
     }
 
-    // 1. Schritt nach dem Einlesen der ini-Datei Datenklassifikator separieren:
-    separatedClassifiers = ZeichenSeparieren(classifiers, trennzeichen);
-    n_classifiers = separatedClassifiers.size();
+    // 1. Schritt nach dem Einlesen der ini-Datei:
+        // Datenklassifikator separieren:
+        separatedClassifiers = ZeichenSeparieren(classifiers, trennzeichen);
+        n_classifiers = separatedClassifiers.size();
+
+        // Verzeichnis für die klassifizierten Dateien einstellen:
+        filesystem::path(klassVerzeichnis) = filesystem::current_path();        // Aktuelles Verzeichnis auslesen
+        klassVerzeichnis.append(dirDistanceFile);                               // Das Wunschverzeichnis anfügen
+        filesystem::create_directory(filesystem::path(klassVerzeichnis));       // Verzeichnis anlegen
+
 
     // Aufruf Programm-Info
     if (processing != "Yes") pgmInfo(pgm_version);
@@ -258,7 +271,7 @@ int main()
                 FahrtenDistanz = DistanzEuklid(separierteZeile);
 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
-                speicherDistanzen(FahrtenDistanz, distancefile);
+                speicherDistanzen(FahrtenDistanz, distancefile, klassVerzeichnis);
 
             }
 
@@ -289,7 +302,7 @@ int main()
                 FahrtenDistanz = DistanzEuklid(separierteZeile);
 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
-                speicherDistanzen(FahrtenDistanz, distancefile);
+                speicherDistanzen(FahrtenDistanz, distancefile, klassVerzeichnis);
 
                 // Daten auf Basis der Distanz klassifizieren:
                 separierteFahrtenDistanz = ZeichenSeparieren(FahrtenDistanz, trennzeichenClassifiers);
@@ -301,7 +314,7 @@ int main()
 
                 sepClass_last = stod(separatedClassifiers[n_classifiers - 1]);
 
-                for (int i = 0; i <= n_classifiers - 1; i++)
+                for (size_t i = 0; i <= n_classifiers - 1; i++)
                 {
                     // Distanz aus Vektor kopieren:
                     sfd = stod(pcot(separierteFahrtenDistanz[5])); // Auchtung! Das Komma mnuss gegen einen Punkt getauscht werden!
@@ -314,7 +327,7 @@ int main()
                         {
                             classfiedData += separatedClassifiers[i];
                             classfiedData += ".csv";
-                            speicherDistanzen(FahrtenDistanz, classfiedData);
+                            speicherDistanzen(FahrtenDistanz, classfiedData, klassVerzeichnis);
                             classfiedData = classifiedDataTemplate;
                         }
 
@@ -331,7 +344,7 @@ int main()
                         {
                             classfiedData += separatedClassifiers[i];
                             classfiedData += ".csv";
-                            speicherDistanzen(FahrtenDistanz, classfiedData);
+                            speicherDistanzen(FahrtenDistanz, classfiedData, klassVerzeichnis);
                             classfiedData = classifiedDataTemplate;
 
                         }
@@ -344,7 +357,7 @@ int main()
 
                         classfiedData += separatedClassifiers[n_classifiers - 1];
                         classfiedData += "plus.csv";
-                        speicherDistanzen(FahrtenDistanz, classfiedData);
+                        speicherDistanzen(FahrtenDistanz, classfiedData, klassVerzeichnis);
                         classfiedData = classifiedDataTemplate;
 
                         // Gefunden, also raus aus der for-Schleife:
@@ -399,7 +412,7 @@ int main()
     log_out << "Number of rows read: " << in_n << "\n\n";
     log_out << "The input file transformed into distances was saved as: " << distancefile << "\n";
     log_out << "The classified data was saved under the template " << classifiedDataTemplate << "\n";
-    log_out << "The files were saved in the following directory: " << std::filesystem::current_path() << "\n\n";
+    log_out << "The files were saved in the following directory: " << klassVerzeichnis << "\n\n";
     log_out << "Execution time in sec: " << ((float)Zeit) / CLOCKS_PER_SEC << "\n";
     log_out << "\n" << "In case of problems, please compare with the config.ini file!" << "\n";
     log_out << "------------ Logbook end ---------------------" << "\n";

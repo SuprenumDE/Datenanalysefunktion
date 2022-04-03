@@ -1,5 +1,2 @@
 ﻿  sup_accumulate.cpp
-C:\Users\guent\Documents\Entwicklung\C++\Datenanalysefunktionen\SupFunktionen\sup_accumulate\sup_accumulate.cpp(304,35): warning C4018: "<=": Konflikt zwischen "signed" und "unsigned"
-  sup_functions.cpp
-  Code wird generiert...
   sup_accumulate.vcxproj -> C:\Users\guent\Documents\Entwicklung\C++\Datenanalysefunktionen\SupFunktionen\sup_accumulate\Debug\sup_accumulate.exe
