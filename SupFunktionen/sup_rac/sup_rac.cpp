@@ -1,4 +1,4 @@
-// sup_rac_wine.cpp
+// sup_rac.cpp
 // Suprenum ReadAndClassify (Daten Lesen und Klassifizieren, Entwickelt für den Weindatensatz)
 // Studie zur Stream-Datenanalyse
 // Entwickler: Guenter Faes, spv@faes.de
@@ -85,7 +85,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.01.40, 28.03.2022" };
+    string pgm_version{ "Version 0.03.00, 03.04.2022" };
 
     const int contfig_row_n{ 14 };               // Anzahl aller Configfile-Informationen
 

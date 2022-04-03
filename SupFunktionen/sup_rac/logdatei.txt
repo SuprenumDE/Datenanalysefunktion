@@ -1,5 +1,5 @@
 ------------ Logbook start -------------------
-Application-Info: Version 0.01.40, 16.03.2022
+Application-Info: Version 0.03.00, 03.04.2022
 
 Project: Weinanalyse
 File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalyse Beispieldaten\Alle_Weindaten.csv
@@ -23,7 +23,7 @@ Haeder-Info:
 Results reported as file(s) with the following template: resfile_*.csv
 The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_rac"
 
-Execution time in sec: 2.654
+Execution time in sec: 3.172
 
 In case of problems, please compare with the config.txt file!
 ------------ Logbook end ---------------------
