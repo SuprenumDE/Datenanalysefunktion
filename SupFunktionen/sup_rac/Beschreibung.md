@@ -12,7 +12,7 @@ einzeln eingelesen, verarbeitet und als verarbeitete Information in eine entspre
 Die Verarbeitung, d. h. die Klassifizierung, erfolgt über die Qualitsbeurteilung. Sie ist ein *Merkmal* im
 Datensatz *Wein*.
 
-Das Programm wird über die config.ini-Datei konfiguriert und nach getaner arbeit, wird eine Log-Datei
+Das Programm wird über die config.ini-Datei konfiguriert und nach getaner Arbeit, wird eine Log-Datei
 geschrieben.
 
 Die folgende Grafik gibt einen Überblick:
