@@ -17,4 +17,5 @@ geschrieben.
 
 Die folgende Grafik gibt einen Überblick:
 
+![sup_rac-Flow](https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/images/sup_rac_Flow.jpg)
 
