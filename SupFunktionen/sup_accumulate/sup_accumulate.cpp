@@ -33,11 +33,12 @@ void pgmInfo(string x)
 * Input: String (zeichenkette)
 * Output: String, Trennzeichen: ;
 */
-string DistanzEuklid(vector<string> separierteZeile)
+string DistanzEuklid(vector<string> separierteZeile, int nachkommastellen)
 {
     string zeichenkette{ "" };
+    string temp{ "" };
 
-    // Geo-Daten aus der separierten Zeile entnehmen:
+    // Variablen deklarieren:
     double start_longitude{ 0.0 };  // X-Achse
     double start_latitude{ 0.0 };   // Y-Achse
     double ende_longitude{ 0.0 };
@@ -47,6 +48,7 @@ string DistanzEuklid(vector<string> separierteZeile)
     double geo_Y{ 0.0 };
     double Distanz{ 0.0 };
 
+    // Geo-Daten aus der separierten Zeile entnehmen:
     start_longitude = stod(separierteZeile[3]);
     start_latitude = stod(separierteZeile[4]);
     ende_longitude = stod(separierteZeile[5]);
@@ -61,8 +63,17 @@ string DistanzEuklid(vector<string> separierteZeile)
     geo_Y = latFaktor * (abs(start_latitude - ende_latitude));
     Distanz = sqrt(geo_X * geo_X + geo_X * geo_X);
 
+    // Startlongitude und -latitude auf die gewünschten Nachkommstellen fraktionieren:
+    // (3 Stellen = 100, 4 stelle = 10 Genauigkeit)
+    start_longitude = ZahlFraktionieren(start_longitude, nachkommastellen);
+    start_latitude = ZahlFraktionieren(start_latitude, nachkommastellen);
+    separierteZeile[3] = "";
+    separierteZeile[4] = "";
+    separierteZeile[3] = std::to_string(start_longitude);  // Angepasst Nachkommastellen zurück speichern
+    separierteZeile[4] = std::to_string(start_latitude);
+
     // Ausgabezeichenkette basteln:
-    zeichenkette = separierteZeile[0];          // key
+     zeichenkette = separierteZeile[0];          // key
     zeichenkette += ";";                        // Trennzeichen csv (Excel, deutsch)
     zeichenkette += ptoc(separierteZeile[1]);   // fare_amount
     zeichenkette += ";";
@@ -133,9 +144,9 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.12.01, 03.04.2022" };
+    string pgm_version{ "Version 0.12.02, 08.04.2022" };
 
-    const int contfig_row_n{ 18 };                  // Anzahl aller Configfile-Informationen
+    const int contfig_row_n{ 20 };                  // Anzahl aller Configfile-Informationen
 
     string config_file{ "config.ini" };             // Muss unbedingt vorhanden sein!
     string logdatei{ "logdatei.txt" };              // Logbuchdatei
@@ -153,8 +164,6 @@ int main()
     string classifiers{ "" };                       // Zeichenkette mit den Klassifizierungsgrenzen
     string FahrtenDistanz{ "" };                    // Eingelesene Datenzeile (inZeile) in der die Geo-Daten als Distanzen in km abgebildet sind
 
-    string temp{ "" };
-
     vector<string> separierteZeile;                 // Eingelesene Datenzeile in Elemente separiert
     vector<string> separierteFahrtenDistanz{ "" };  // FahrtenDistanz in Elemente zerlegt
     vector<string> separatedClassifiers;            // Eingelesene Klassifizierungsgrenze separriert
@@ -164,8 +173,7 @@ int main()
 
     size_t n_classifiers{ 0 };                      // Anzahl der eingelesenen Klassifizierungsgrenzen
 
-
-
+    int geo_accu{ 0 };                              // Genauigkeit der klassifizierten Geo-Daten
 
     // Ausführungsteil:
 
@@ -186,6 +194,7 @@ int main()
             if (i == 13) classifiers = config_content[i];
             if (i == 15) classifiedDataTemplate = config_content[i];
             if (i == 17) dirDistanceFile = config_content[i];
+            if (i == 19) geo_accu = stoi(config_content[i]);
 
         }
 
@@ -268,7 +277,7 @@ int main()
              */
             if ((in_n > 0) && (separierteZeile[3] != "0")) {
 
-                FahrtenDistanz = DistanzEuklid(separierteZeile);
+                FahrtenDistanz = DistanzEuklid(separierteZeile, geo_accu);
 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
                 speicherDistanzen(FahrtenDistanz, distancefile, klassVerzeichnis);
@@ -299,7 +308,7 @@ int main()
             if ((in_n > 0) && stod(separierteZeile[3]) != 0)
             {
 
-                FahrtenDistanz = DistanzEuklid(separierteZeile);
+                FahrtenDistanz = DistanzEuklid(separierteZeile, geo_accu);
 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
                 speicherDistanzen(FahrtenDistanz, distancefile, klassVerzeichnis);

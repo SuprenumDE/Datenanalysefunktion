@@ -46,7 +46,38 @@ std::string pcot(std::string zeichenkette)
 }
 // ------------------------------------------------------------------------
 
+/* Dezimalzahl runden
+   Weil die Rundungsfunktionen von mtah.h und der int-Trick unbefriedigend sind
+   (es pfuscht immer die Rechnergenauigkeit rein) wurde diese Rundungsfunktion
+   über einen String geschrieben.
+ */
+double ZahlFraktionieren(double zahl, int dezimalstellen)
+{
 
+	std::string zahl_string{ "" };
+	int laenge{ 0 };
+	int dezimalpos{ 0 };
+	int neu_laenge{ 0 };
+
+	double ergebnis{ 0.0 };
+
+	zahl_string = std::to_string(zahl);
+	laenge = zahl_string.size();
+	dezimalpos = zahl_string.find(".", 0);
+
+
+	// Berechnung der neuen Stringlänge zur Extraktion:
+	neu_laenge = dezimalpos + dezimalstellen + 1;
+
+	// Extraktion:
+	zahl_string = zahl_string.std::string::substr(0, neu_laenge);
+
+	ergebnis = std::stod(zahl_string);
+
+	return ergebnis;
+
+}
+// ------------------------------------------------------------------------
 
 /* Zerlegung der übergebenen Zeichenkette in einzelne Elemente
    Input: String (zeichenkette, trennzeichen)

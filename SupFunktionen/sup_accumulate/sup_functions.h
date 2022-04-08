@@ -18,6 +18,9 @@ std::string ptoc(std::string zeichenkette);
 // Tausche Komma gegen Punkt (Dezimaltrennzeichen):
 std::string pcot(std::string zeichenkette);
 
+// Zahl runden:
+double ZahlFraktionieren(double zahl, int dezimalstellen);
+
 // Separieren einer Zeichenkette auf Basis eines definierten Trennzeichens
 std::vector<std::string>ZeichenSeparieren(std::string zeichenkette, std::string trennzeichen);
 
