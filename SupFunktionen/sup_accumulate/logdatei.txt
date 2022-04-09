@@ -1,5 +1,5 @@
 ------------ Logbook start -------------------
-Application-Info: Version 0.12.01, 03.04.2022
+Application-Info: Version 0.12.02, 08.04.2022
 
 Project: NY-Taxi-Datenanalyse
 File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalyse Beispieldaten\train.csv
@@ -10,7 +10,7 @@ The input file transformed into distances was saved as: disfile.csv
 The classified data was saved under the template classified_data_
 The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_accumulate\\classified_data"
 
-Execution time in sec: 1.59
+Execution time in sec: 2.24
 
 In case of problems, please compare with the config.ini file!
 ------------ Logbook end ---------------------

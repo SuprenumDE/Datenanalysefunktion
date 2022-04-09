@@ -1,5 +1,5 @@
-// sup_accumulate.cpp
-// Suprenum ReadAndClassify (Daten Lesen, Klassifizieren und Akkumulieren, Entwickelt für den Kaggle-NY-Taxi-Datensatz)
+// sup_rac2.cpp
+// Suprenum ReadAndClassify 2 (Daten Lesen und Klassifizieren 2. Beispiel, Entwickelt für den Kaggle-NY-Taxi-Datensatz)
 // Studie zur Stream-Datenanalyse
 // Entwickler: Guenter Faes, spv@faes.de
 // --------------------------------------
@@ -21,11 +21,11 @@ using namespace std;
 /* Info-Ausgabe als Funktion */
 void pgmInfo(string x)
 {
-    cout << "**********************************************\n";
-    cout << "Studie Daten einlesen und verarbeiten\n";
+    cout << "****************************************************\n";
+    cout << "Studie Daten einlesen und verarbeiten, 2. Beispiel\n";
     cout << "Einlesen des Datensatzes test.csv (Kaggle) als * stream *\n";
     cout << "Application-Info: " << x << "\n";
-    cout << "**********************************************\n\n";
+    cout << "*****************************************************\n\n";
 }
 // ------------------------------------------------------------------------
 
