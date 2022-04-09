@@ -30,10 +30,10 @@ void pgmInfo(string x)
 // ------------------------------------------------------------------------
 
 /* Umrechnung der Geo-Koordinaten in die euklidische Distanz
-* Input: String (zeichenkette)
+* Input: String (zeichenkette), int Geo-Genauigkeit
 * Output: String, Trennzeichen: ;
 */
-string DistanzEuklid(vector<string> separierteZeile, int nachkommastellen)
+string DistanzEuklid(vector<string> separierteZeile, vector<string>separierteZeit, int geo_accu)
 {
     string zeichenkette{ "" };
     string temp{ "" };
@@ -65,12 +65,10 @@ string DistanzEuklid(vector<string> separierteZeile, int nachkommastellen)
 
     // Startlongitude und -latitude auf die gewünschten Nachkommstellen fraktionieren:
     // (3 Stellen = 100, 4 stelle = 10 Genauigkeit)
-    start_longitude = ZahlFraktionieren(start_longitude, nachkommastellen);
-    start_latitude = ZahlFraktionieren(start_latitude, nachkommastellen);
-    separierteZeile[3] = "";
-    separierteZeile[4] = "";
-    separierteZeile[3] = std::to_string(start_longitude);  // Angepasst Nachkommastellen zurück speichern
-    separierteZeile[4] = std::to_string(start_latitude);
+    start_longitude = ZahlFraktionieren(start_longitude, geo_accu);
+    start_latitude = ZahlFraktionieren(start_latitude, geo_accu);
+    separierteZeile[3] = std::to_string(start_longitude) + "\0";  // Angepasst Nachkommastellen zurück speichern und das neue String-Ende-Zeichen setzen
+    separierteZeile[4] = std::to_string(start_latitude) + "\0";
 
     // Ausgabezeichenkette basteln:
      zeichenkette = separierteZeile[0];          // key
@@ -78,6 +76,12 @@ string DistanzEuklid(vector<string> separierteZeile, int nachkommastellen)
     zeichenkette += ptoc(separierteZeile[1]);   // fare_amount
     zeichenkette += ";";
     zeichenkette += separierteZeile[2];         // pickup_datetime
+    zeichenkette += ";";
+    zeichenkette += separierteZeit[0];          // pickup Datum
+    zeichenkette += ";";
+    zeichenkette += separierteZeit[1];          // pickup Stunde
+    zeichenkette += ";";
+    zeichenkette += separierteZeit[2];          // Pickup Zeitzone
     zeichenkette += ";";
     zeichenkette += ptoc(separierteZeile[3]);   // Startlongitude
     zeichenkette += ";";
@@ -121,6 +125,12 @@ void speicherDistanzen(string zeichenkette, string Dateibezeichnung, filesystem:
         Kopfzeile += ";";
         Kopfzeile += "pickup_datetime";
         Kopfzeile += ";";
+        Kopfzeile += "pickup_Datum";
+        Kopfzeile += ";";
+        Kopfzeile += "pickup_Stunde";
+        Kopfzeile += ";";
+        Kopfzeile += "pickup_Zeitzone";
+        Kopfzeile += ";";
         Kopfzeile += "Startlongitude";
         Kopfzeile += ";";
         Kopfzeile += "Startlatitude";
@@ -144,7 +154,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.12.02, 08.04.2022" };
+    string pgm_version{ "Version 0.13.00, 09.04.2022" };
 
     const int contfig_row_n{ 20 };                  // Anzahl aller Configfile-Informationen
 
@@ -167,6 +177,7 @@ int main()
     vector<string> separierteZeile;                 // Eingelesene Datenzeile in Elemente separiert
     vector<string> separierteFahrtenDistanz{ "" };  // FahrtenDistanz in Elemente zerlegt
     vector<string> separatedClassifiers;            // Eingelesene Klassifizierungsgrenze separriert
+    vector<string> separierteZeit{ "" };            // Taxi-Einstiegszeit in Tag, Stunde und Zeitzone zerlegen
 
     long long read_n_rows{ 0 };                     // Stopp Ausfuehrung nach n Zeilen (n = 0: ohne Limitation)
     long long in_n{ 0 };                            // Anzahl der eingelesenen Datenzeilen
@@ -216,7 +227,7 @@ int main()
         return EXIT_FAILURE;
     }
 
-    // 1. Schritt nach dem Einlesen der ini-Datei:
+    // Schritt nach dem Einlesen der ini-Datei:
         // Datenklassifikator separieren:
         separatedClassifiers = ZeichenSeparieren(classifiers, trennzeichen);
         n_classifiers = separatedClassifiers.size();
@@ -277,7 +288,7 @@ int main()
              */
             if ((in_n > 0) && (separierteZeile[3] != "0")) {
 
-                FahrtenDistanz = DistanzEuklid(separierteZeile, geo_accu);
+                FahrtenDistanz = DistanzEuklid(separierteZeile, separierteZeit, geo_accu);
 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
                 speicherDistanzen(FahrtenDistanz, distancefile, klassVerzeichnis);
@@ -300,20 +311,25 @@ int main()
             // Eingelesenen String zerlegen:
             separierteZeile = ZeichenSeparieren(inZeile, trennzeichen);
 
-            /* Akkumulierungsfunktionen:
+            // Als zusätzlichen Datenanalyse-Service wird die Einstiegszeit noch zerlegt:
+            if (in_n > 0) separierteZeit = ZeichenSeparieren(separierteZeile[2], " ");
+
+            /* Klassifierungsfunktionen:
             Nur durchführen, wenn der Inhalt des ersten Geo-Feldes nicht leer ist!
             Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
             1. Geo-Daten in km-Distanzen umrechnen
              */
-            if ((in_n > 0) && stod(separierteZeile[3]) != 0)
+            if ((in_n > 0) && stod(separierteZeile[3]) != 0.0)
             {
 
-                FahrtenDistanz = DistanzEuklid(separierteZeile, geo_accu);
+                // FahrtenDistanz beinhaltet alle Informationen zusätzlicher der Transformierten!
+                FahrtenDistanz = DistanzEuklid(separierteZeile, separierteZeit, geo_accu);
 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
+                // (Gesamtüberblick)
                 speicherDistanzen(FahrtenDistanz, distancefile, klassVerzeichnis);
 
-                // Daten auf Basis der Distanz klassifizieren:
+                // Daten auf Basis der Distanz klassifizieren und speichern:
                 separierteFahrtenDistanz = ZeichenSeparieren(FahrtenDistanz, trennzeichenClassifiers);
 
                 double sfd{ 0.0 };          // Hilfsvaribale für separierteFahrtenDistanz[3]
@@ -326,7 +342,7 @@ int main()
                 for (size_t i = 0; i <= n_classifiers - 1; i++)
                 {
                     // Distanz aus Vektor kopieren:
-                    sfd = stod(pcot(separierteFahrtenDistanz[5])); // Auchtung! Das Komma mnuss gegen einen Punkt getauscht werden!
+                    sfd = stod(pcot(separierteFahrtenDistanz[8])); // Auchtung! Das Komma mnuss gegen einen Punkt getauscht werden!
                     sepClass = stod(separatedClassifiers[i]);
 
 
@@ -376,7 +392,7 @@ int main()
 
                 } // Ende for
 
-            } // Ende Akkumulierungsfunktionen if
+            } // Ende Klasifizierungsfunktionen if
 
             // Abbruchbedingung prüfen:
             if (in_n == read_n_rows) {

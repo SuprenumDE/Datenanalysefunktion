@@ -8,9 +8,9 @@ Number of rows read: 1000
 
 The input file transformed into distances was saved as: disfile.csv
 The classified data was saved under the template classified_data_
-The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_accumulate\\classified_data"
+The files were saved in the following directory: "C:\\Users\\guent\\Documents\\Entwicklung\\C++\\Datenanalysefunktionen\\SupFunktionen\\sup_rac2\\classified_data"
 
-Execution time in sec: 2.24
+Execution time in sec: 1.723
 
 In case of problems, please compare with the config.ini file!
 ------------ Logbook end ---------------------
