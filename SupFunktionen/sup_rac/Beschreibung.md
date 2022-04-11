@@ -20,11 +20,12 @@ Die folgende Grafik gibt einen Überblick:
 ![sup_rac-Flow](https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/images/sup_rac_Flow.jpg)
 
 ### Aus C++-Sicht wesentliche Merkmale des Programms:
+- Standard C++ 17
 - Alle Anweisungen und Funktionen in einem Skript
 - Funktion, Übergabe als Wert
-- Einlesen und Schreiben von CSV-Dateien (ifstream / ofstream /getline)
+- Einlesen und Schreiben von CSV-Dateien (#include <fstream>, #include <filesystem>, ifstream / ofstream /getline)
 - Kontrollstrukturen (if / while)
-- Zeichenkettenbearbeitung (string)
-- Vektoren (verctor)
-- Zeiterfassung (ctime)
-- Funktion, Übergabe als Wert
+- Zeichenkettenbearbeitung (#include <string>)
+- Vektoren (#include <vector>)
+- Zeiterfassung (#include <ctime>)
+
