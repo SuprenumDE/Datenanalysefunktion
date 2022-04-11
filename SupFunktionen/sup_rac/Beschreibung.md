@@ -7,7 +7,7 @@
 Diese ist das 1. Programm zum Einlesen und Verarbeiten von Daten, die kontinuierlich anfallen. Das ist
 für dieses Programm natürlich noch simuliert. Die verwendeten Beispieldaten könnten *locker* von dem
 System/Programm eingelesen werden, aber dass ist nicht das Ziel dieser Simulation. Jede Datenzeile wird
-einzeln eingelesen, verarbeitet und als verarbeitete Information in eine entsprechenden csv-File gespeichert.
+einzeln eingelesen, verarbeitet und als verarbeitete Information in eine entsprechenden csv-Datei gespeichert.
 
 Die Verarbeitung, d. h. die Klassifizierung, erfolgt über die Qualitsbeurteilung. Sie ist ein *Merkmal* im
 Datensatz *Wein*.
@@ -18,4 +18,14 @@ geschrieben.
 Die folgende Grafik gibt einen Überblick:
 
 ![sup_rac-Flow](https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/images/sup_rac_Flow.jpg)
+
+### Aus C++-Sicht wesentliche Merkmale des Programms:
+- Standard C++ 17
+- Alle Anweisungen und Funktionen in einem Skript
+- Funktion, Übergabe als Wert
+- Einlesen und Schreiben von CSV-Dateien (#include <fstream>, #include <filesystem>, ifstream / ofstream /getline)
+- Kontrollstrukturen (if / while)
+- Zeichenkettenbearbeitung (#include <string>)
+- Vektoren (#include <vector>)
+- Zeiterfassung (#include <ctime>)
 
