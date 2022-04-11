@@ -50,14 +50,14 @@ vector<string>ZeichenSeparieren(string zeichenkette, string trennzeichen)
 
 /* Zeile bezüglich eines Merkmals klassifizieren und in der
    entsprechenden Datei ablegen.
-   Diese Funktion ist datenanalystisch gesehen, ein Klassifikator
+   Diese Funktion ist datenanalystisch gesehen ein Klassifikator
    basierend auf einem Merkmal
    Input: String, Vektor-Element, resdatei-Template
 */
 void klassifikator(string zeichenkette, string merkmal, string resfile, string header_row_save)
 {
     // Resultatdatei-Template mit Merkmal-Ausprägung verknüpfen:
-    resfile += merkmal;
+    resfile += merkmal; // Das Merkmal ist der "Klassifikator", darüber wird die Datei festgelegt.
     resfile += ".csv";
 
     ofstream resout;
@@ -196,7 +196,7 @@ int main()
 
             }
 
-            // Eingelesene Daten klassifizieren und spreichern:
+            // Eingelesene Daten über separierteZeile[12] klassifizieren und spreichern:
             if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
 
             in_n += 1; // Anzahl der eingelesenen Zeilen hochzählen
@@ -222,7 +222,7 @@ int main()
 
             }
 
-            // Eingelesene Daten klassifizieren und spreichern:
+            // Eingelesene Daten separierteZeile[12] klassifizieren und spreichern:
             if (in_n > 0) klassifikator(inZeile, separierteZeile[12], resdatei, header_row_save);
 
             // Abbruchbedingung prüfen:
