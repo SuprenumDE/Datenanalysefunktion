@@ -1,3 +1,4 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(514,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (sup_accumulate.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
   sup_rac2.cpp
+C:\Users\guent\Documents\Entwicklung\C++\Datenanalysefunktionen\SupFunktionen\sup_rac2\sup_rac2.cpp(280,35): warning C4244: "=": Konvertierung von "clock_t" in "float", möglicher Datenverlust
   sup_accumulate.vcxproj -> C:\Users\guent\Documents\Entwicklung\C++\Datenanalysefunktionen\SupFunktionen\sup_rac2\Debug\sup_rac2.exe

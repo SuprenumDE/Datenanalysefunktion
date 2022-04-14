@@ -154,9 +154,9 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.13.00, 09.04.2022" };
+    string pgm_version{ "Version 0.14.01, 14.04.2022" };
 
-    const int contfig_row_n{ 20 };                  // Anzahl aller Configfile-Informationen
+    const int contfig_row_n{ 22 };                  // Anzahl aller Configfile-Informationen
 
     string config_file{ "config.ini" };             // Muss unbedingt vorhanden sein!
     string logdatei{ "logdatei.txt" };              // Logbuchdatei
@@ -178,6 +178,9 @@ int main()
     vector<string> separierteFahrtenDistanz{ "" };  // FahrtenDistanz in Elemente zerlegt
     vector<string> separatedClassifiers;            // Eingelesene Klassifizierungsgrenze separriert
     vector<string> separierteZeit{ "" };            // Taxi-Einstiegszeit in Tag, Stunde und Zeitzone zerlegen
+
+    float LaufZeit{ 0.0 };                          // Wie lange sollen Daten eingelesen werden? Zeit in Sekunden
+    float AktLaufZeit{ 0.0 };                       // Wie lange läuft das Programm?
 
     long long read_n_rows{ 0 };                     // Stopp Ausfuehrung nach n Zeilen (n = 0: ohne Limitation)
     long long in_n{ 0 };                            // Anzahl der eingelesenen Datenzeilen
@@ -206,6 +209,7 @@ int main()
             if (i == 15) classifiedDataTemplate = config_content[i];
             if (i == 17) dirDistanceFile = config_content[i];
             if (i == 19) geo_accu = stoi(config_content[i]);
+            if (i == 21) LaufZeit = stof(config_content[i]);
 
         }
 
@@ -248,7 +252,6 @@ int main()
     clock_t Zeit;
     Zeit = clock();
 
-
     // Datei einlesen:
     ifstream datei_in(dateiname);
     // Prüfen, ob Datei vorhanden
@@ -269,7 +272,17 @@ int main()
     {
 
         // Kontinuierliches oder eine bestimmte Anzahl Datenzeilen einlesen?
-        if (read_n_rows == 0) { // Kontinuierlich
+        if ((read_n_rows == 0)) // Einlesen, bis die vorgegebene Zeit erreicht ist
+        {
+
+            // Laufzeit-Ende prüfen:
+            // Wenn Laufzeit überschritten, dann das Einlesen abbrechen
+            AktLaufZeit = clock() - Zeit;
+            AktLaufZeit = (float)AktLaufZeit / CLOCKS_PER_SEC;
+            if (AktLaufZeit > LaufZeit)
+            {
+                break; // while verlassen
+            }
 
             getline(datei_in, inZeile);
 
@@ -281,20 +294,88 @@ int main()
             // Eingelesenen String zerlegen:
             separierteZeile = ZeichenSeparieren(inZeile, trennzeichen);
 
-            /* Akkumulierungsfunktionen:
+            // Als zusätzlichen Datenanalyse-Service wird die Einstiegszeit noch zerlegt:
+            if (in_n > 0) separierteZeit = ZeichenSeparieren(separierteZeile[2], " ");
+
+            /* Klassifierungsfunktionen:
             Nur durchführen, wenn der Inhalt des ersten Geo-Feldes nicht leer ist!
             Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
             1. Geo-Daten in km-Distanzen umrechnen
              */
-            if ((in_n > 0) && (separierteZeile[3] != "0")) {
+            if ((in_n > 0) && stod(separierteZeile[3]) != 0.0)
+            {
 
+                // FahrtenDistanz beinhaltet alle Informationen zusätzlicher der Transformierten!
                 FahrtenDistanz = DistanzEuklid(separierteZeile, separierteZeit, geo_accu);
 
                 // Die Geo-Daten-Transformationen (Distanz in km) als Datei speichern:
+                // (Gesamtüberblick)
                 speicherDistanzen(FahrtenDistanz, distancefile, klassVerzeichnis);
 
-            }
+                // Daten auf Basis der Distanz klassifizieren und speichern:
+                separierteFahrtenDistanz = ZeichenSeparieren(FahrtenDistanz, trennzeichenClassifiers);
 
+                double sfd{ 0.0 };          // Hilfsvaribale für separierteFahrtenDistanz[3]
+                double sepClass{ 0.0 };     // Hilfsvariable für separatedClassifiers[i]
+                double sepClass_1{ 0.0 };   // Hilfsvariable für separatedClassifiers[i -1]
+                double sepClass_last{ 0.0 };// Hilfsvariable für separatedClassifiers[letztes Element]
+
+                sepClass_last = stod(separatedClassifiers[n_classifiers - 1]);
+
+                for (size_t i = 0; i <= n_classifiers - 1; i++)
+                {
+                    // Distanz aus Vektor kopieren:
+                    sfd = stod(pcot(separierteFahrtenDistanz[8])); // Auchtung! Das Komma mnuss gegen einen Punkt getauscht werden!
+                    sepClass = stod(separatedClassifiers[i]);
+
+
+                    if (i == 0) // Der Startbereich des 1. Klasse ist immer 0!
+                    {
+                        if (sfd <= sepClass) //  Vergleich mit dem 1. Klassifikator
+                        {
+                            classfiedData += separatedClassifiers[i];
+                            classfiedData += ".csv";
+                            speicherDistanzen(FahrtenDistanz, classfiedData, klassVerzeichnis);
+                            classfiedData = classifiedDataTemplate;
+                        }
+
+                    }
+
+                    if (i > 0) {
+
+                        sepClass_1 = stod(separatedClassifiers[i - 1]);
+
+                        if ((sfd > sepClass_1) && (sfd <= sepClass))
+
+                            // Der i-1-Klassifikator ist die Untergrenze!            // Vergleiche ab dem 2. Klassifikator
+
+                        {
+                            classfiedData += separatedClassifiers[i];
+                            classfiedData += ".csv";
+                            speicherDistanzen(FahrtenDistanz, classfiedData, klassVerzeichnis);
+                            classfiedData = classifiedDataTemplate;
+
+                        }
+
+
+                    } // Ende if
+
+                    if (sfd > sepClass_last)
+                    {   // Alles was größer ist als die größte Klassifizierung aufnehmen (der Restesammler):
+
+                        classfiedData += separatedClassifiers[n_classifiers - 1];
+                        classfiedData += "plus.csv";
+                        speicherDistanzen(FahrtenDistanz, classfiedData, klassVerzeichnis);
+                        classfiedData = classifiedDataTemplate;
+
+                        // Gefunden, also raus aus der for-Schleife:
+                        break;
+
+                    }
+
+                } // Ende for
+
+            } // Ende Klasifizierungsfunktionen if
 
             in_n += 1; // Anzahl der eingelesenen Zeilen hochzählen
 
@@ -399,15 +480,16 @@ int main()
                 break;
                 }
 
-        }
+            in_n += 1; // Anzahl der eingelesenen Zeilen zählen
+
+        }  // Ende else-Zweig (Einlesen bis zur vorgegebenen Anzahl Zeilen)
             
         if (processing != "Yes") {
 
             // Eingelesene Zeile auf ausgeben:
             cout << inZeile << "\n";
         }
-
-        in_n += 1; // Anzahl der eingelesenen Zeilen zählen
+        
 
     } // Ende while
 
