@@ -85,7 +85,7 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.03.00, 03.04.2022" };
+    string pgm_version{ "Version 0.03.01, 17.04.2022" };
 
     const int contfig_row_n{ 14 };               // Anzahl aller Configfile-Informationen
 
@@ -307,6 +307,8 @@ int main()
 
         } while (eingabe != 'q');
 
+        // Eine beliebte Alternative:
+        // system("pause");
     }
 
     return 0;
