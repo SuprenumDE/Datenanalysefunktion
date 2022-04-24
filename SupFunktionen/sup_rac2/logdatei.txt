@@ -4,7 +4,7 @@ Application-Info: Version 0.14.01, 14.04.2022
 Project: NY-Taxi-Datenanalyse
 File analyzed: C:\Users\guent\Documents\Entwicklung\C++\Datenanalyse Beispieldaten\train.csv
 
-Number of rows read: 38953
+Number of rows read: 29846
 
 The input file transformed into distances was saved as: disfile.csv
 The classified data was saved under the template classified_data_

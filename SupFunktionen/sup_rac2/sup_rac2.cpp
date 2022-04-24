@@ -154,9 +154,9 @@ int main()
 
     // Variablendeklaration:
 
-    string pgm_version{ "Version 0.14.01, 14.04.2022" };
+    string pgm_version{ "Version 0.15.00, 24.04.2022" };
 
-    const int contfig_row_n{ 22 };                  // Anzahl aller Configfile-Informationen
+    const int contfig_row_n{ 27 };                  // Anzahl aller Configfile-Informationen
 
     string config_file{ "config.ini" };             // Muss unbedingt vorhanden sein!
     string logdatei{ "logdatei.txt" };              // Logbuchdatei
@@ -178,6 +178,12 @@ int main()
     vector<string> separierteFahrtenDistanz{ "" };  // FahrtenDistanz in Elemente zerlegt
     vector<string> separatedClassifiers;            // Eingelesene Klassifizierungsgrenze separriert
     vector<string> separierteZeit{ "" };            // Taxi-Einstiegszeit in Tag, Stunde und Zeitzone zerlegen
+
+                                                    // Geografische Plausibilitätsdaten:
+    float longitude_von{ 0.0 };                     // Longitude von
+    float longitude_bis{ 0.0 };                     // Longitude bis
+    float latitude_von{ 0.0 };                      // Latitude von
+    float latitude_bis{ 0.0 };                      /// Latidude bis
 
     float LaufZeit{ 0.0 };                          // Wie lange sollen Daten eingelesen werden? Zeit in Sekunden
     float AktLaufZeit{ 0.0 };                       // Wie lange läuft das Programm?
@@ -209,7 +215,11 @@ int main()
             if (i == 15) classifiedDataTemplate = config_content[i];
             if (i == 17) dirDistanceFile = config_content[i];
             if (i == 19) geo_accu = stoi(config_content[i]);
-            if (i == 21) LaufZeit = stof(config_content[i]);
+            if (i == 21) latitude_von = stof(config_content[i]);
+            if (i == 22) latitude_bis = stof(config_content[i]);
+            if (i == 23) longitude_von = stof(config_content[i]);
+            if (i == 24) longitude_bis = stof(config_content[i]);
+            if (i == 26) LaufZeit = stof(config_content[i]);
 
         }
 
@@ -288,7 +298,7 @@ int main()
 
             // Sicherheitsabfrage:
             if (inZeile.length() == 0) {
-                break;       // Abbruch, wenn eine leere Zeile eingelsenen wurde!
+                break;       // Abbruch, wenn eine leere Zeile eingelesen wurde!
             }
 
             // Eingelesenen String zerlegen:
@@ -298,11 +308,14 @@ int main()
             if (in_n > 0) separierteZeit = ZeichenSeparieren(separierteZeile[2], " ");
 
             /* Klassifierungsfunktionen:
-            Nur durchführen, wenn der Inhalt des ersten Geo-Feldes nicht leer ist!
-            Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
-            1. Geo-Daten in km-Distanzen umrechnen
+            Nur durchführen, wenn die beobachteten Geo-Daten den geografischen Plausibilitätsdaten
+            entsprechen (separierteZeile[3] = Startlongitude und
+            separierteZeile[4] = Startlatitude).
+            Hier das dazugehörige if-Monster:
              */
-            if ((in_n > 0) && stod(separierteZeile[3]) != 0.0)
+            if ((in_n > 0) &&
+                (stod(separierteZeile[3]) >= longitude_von && stod(separierteZeile[3]) <= longitude_bis) &&
+                (stod(separierteZeile[4]) >= latitude_von && stod(separierteZeile[4]) <= latitude_bis))
             {
 
                 // FahrtenDistanz beinhaltet alle Informationen zusätzlicher der Transformierten!
@@ -396,13 +409,17 @@ int main()
             if (in_n > 0) separierteZeit = ZeichenSeparieren(separierteZeile[2], " ");
 
             /* Klassifierungsfunktionen:
-            Nur durchführen, wenn der Inhalt des ersten Geo-Feldes nicht leer ist!
-            Das erste Geo-Feld ist in separierteZeile[3] abgelegt.
-            1. Geo-Daten in km-Distanzen umrechnen
+            Nur durchführen, wenn die beobachteten Geo-Daten den geografischen Plausibilitätsdaten
+            entsprechen (separierteZeile[3] = Startlongitude und
+            separierteZeile[4] = Startlatitude).
+            Hier das dazugehörige if-Monster:
              */
-            if ((in_n > 0) && stod(separierteZeile[3]) != 0.0)
+            if ((in_n > 0) &&
+                (stod(separierteZeile[3]) >= longitude_von && stod(separierteZeile[3]) <= longitude_bis) &&
+                (stod(separierteZeile[4]) >= latitude_von && stod(separierteZeile[4]) <= latitude_bis))
             {
 
+                // Geo-Daten in km-Distanzen umrechnen:
                 // FahrtenDistanz beinhaltet alle Informationen zusätzlicher der Transformierten!
                 FahrtenDistanz = DistanzEuklid(separierteZeile, separierteZeit, geo_accu);
 
@@ -488,6 +505,7 @@ int main()
 
             // Eingelesene Zeile auf ausgeben:
             cout << inZeile << "\n";
+
         }
         
 
