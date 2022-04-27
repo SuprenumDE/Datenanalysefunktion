@@ -1,4 +1,4 @@
-# Überblickartige Beschreibung des Programms sup_rac.cpp
+# Überblickartige Beschreibung des Programms sup_rac2.cpp
 ## Suprenum ReadAndClassify 2 (Daten Lesen und Klassifizieren, Entwickelt für den NY-Taxi-Datensatz)
 ## Studie zur Stream-Datenanalyse
 
