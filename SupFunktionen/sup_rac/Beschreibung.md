@@ -22,10 +22,15 @@ Die folgende Grafik gibt einen Überblick:
 ### Aus C++-Sicht wesentliche Merkmale des Programms:
 - Standard C++ 17
 - Alle Anweisungen und Funktionen in einem Skript
+- Variablendeklaration
+  - string
+  - vector<string>
+  - long long
+  - const int
 - Funktion, Übergabe als Wert
-- Einlesen und Schreiben von CSV-Dateien (#include <fstream>, #include <filesystem>, ifstream / ofstream /getline)
+- Einlesen und Schreiben von CSV-Dateien (#include *fstream*, #include *filesystem*, ifstream / ofstream /getline)
 - Kontrollstrukturen (if / while)
-- Zeichenkettenbearbeitung (#include <string>)
-- Vektoren (#include <vector>)
-- Zeiterfassung (#include <ctime>)
+- Zeichenkettenbearbeitung (#include *string*)
+- Vektoren (#include *vector*)
+- Zeiterfassung (#include *ctime*)
 
