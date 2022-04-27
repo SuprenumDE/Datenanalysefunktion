@@ -3,7 +3,7 @@
 
 
 -----------------------------------------------------------------------------------
-Ich bin noch ein absoluter C++-Neuling und die hier veröffentlichten Programme beschreiben
+Ich starte als absoluter C++-Neuling und die hier veröffentlichten Programme beschreiben
 meine C++-Lernreise. Wie vermutlich alle C/C++-Neulinge habe auch ich einen tiefen Respekt
 vor C++ mit seinen tiefgehenden und anspruchsvollen Möglichkeiten. Deswegen starte ich
 bewußt einfach und hoffe mich im Laufe der C++-Lernreise zu einem Kenner zu entwickeln.
