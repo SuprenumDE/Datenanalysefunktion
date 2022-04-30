@@ -34,3 +34,7 @@ Die folgende Grafik gibt einen Überblick:
 - Vektoren (#include *vector*)
 - Zeiterfassung (#include *ctime*)
 
+### Video-Beschreibung des sup_rac2-Skripts
+  
+  *In Arbeit ...*
+ 
