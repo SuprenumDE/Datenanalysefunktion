@@ -51,7 +51,7 @@ Hier ein Beispiel:
   
 ### Beispiel zur möglichen weiteren Nutzung der Ergebnisdateien mit der Statistikumgebung R
   
-In diesem Beipsiel wurden die Ergebnisdateien mit der Statistikumgebung R weiterverabeitet. In diesem Fall, ist es eine
+In diesem Beispiel wurden die Ergebnisdateien mit der Statistikumgebung R weiterverabeitet. In diesem Fall, ist es eine
 Visulalisierung der Startlongitude und -latidude im Bereich New York, Manhatten:
   
 
