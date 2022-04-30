@@ -54,6 +54,8 @@ Hier ein Beispiel:
 In diesem Beispiel wurden die Ergebnisdateien mit der Statistikumgebung R weiterverabeitet. In diesem Fall, ist es eine
 Visulalisierung der Startlongitude und -latidude im Bereich New York, Manhatten:
   
+![Geo-Daten NY-Taxi](https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/images/Geo_Daten_NY_Taxi.jpg)
+  
 
 Das dazugehörige R-Skript: https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/R-Skripte/geo_skript.R
 
