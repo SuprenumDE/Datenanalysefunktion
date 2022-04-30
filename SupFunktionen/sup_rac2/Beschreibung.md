@@ -60,5 +60,8 @@ Visulalisierung der Startlongitude und -latidude im Bereich New York, Manhatten:
 Das dazugehörige R-Skript: https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/R-Skripte/geo_skript.R
 
 
-
+### Video-Beschreibung des sup_rac2-Skripts
+  
+  *In Arbeit ...*
+  
   
