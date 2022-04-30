@@ -14,7 +14,7 @@ Jede Datenzeile wird einzeln eingelesen, verarbeitet und als verarbeitete Inform
 csv-Datei gespeichert.
 
 Die Verarbeitung, d. h. die Klassifizierung, erfolgt über die im Programm berechnete Distanz. Die Distanz (eklidische)
-ist ein nues *Merkmal* und wird neben weiteren transformierten Merkmalen in den Ergebnisdateien abgelegt.
+ist ein nues *Merkmal* und wird neben weiteren transformierten Merkmalen in den Ergebnisdateien abgelegt (siehe auch weiter unten).
 
 Das Programm wird über die config.ini-Datei konfiguriert und nach getaner Arbeit wird eine Log-Datei
 geschrieben.
@@ -42,3 +42,21 @@ Die folgende Grafik gibt einen Überblick:
 - Vektoren (#include *vector*)
 - Zeiterfassung (#include *ctime*)
 
+### Beispiel einer Ergebnisdatei:
+Die Ergebnisdateinen werden als csv-Dateien mit einem Semikolon (;) als Trennzeichen und dem Komma (,) als
+Dezimalstellenkennzeichen erzeugt. Somit können Sie direkt mit EXCEL in deutschen Gebietsschema eingelesen werden.
+Hier ein Beispiel:
+  
+![csv-Ergebnisdatei](https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/images/Beispiel_classified_data_3.jpg)
+  
+### Beispiel zur möglichen weiteren Nutzung der Ergebnisdateien mit der Statistikumgebung R
+  
+In diesem Beipsiel wurden die Ergebnisdateien mit der Statistikumgebung R weiterverabeitet. In diesem Fall, ist es eine
+Visulalisierung der Startlongitude und -latidude im Bereich New York, Manhatten:
+  
+
+Das dazugehörige R-Skript: https://github.com/SuprenumDE/Datenanalysefunktion/blob/main/R-Skripte/geo_skript.R
+
+
+
+  
